@@ -331,7 +331,9 @@ function updateProgress() {
     } else {
         value = Math.min((questionIndexForStep(state.step)) / totalQuestions * 100, 90);
     }
-    progressFill.style.width = `${Math.max(4, value)}%`;
+    const safeProgress = Math.max(4, value);
+    progressFill.style.width = `${safeProgress}%`;
+    progressFill.classList.toggle('is-hot', safeProgress >= 70);
 }
 
 function setSticky({ stepLabel, hint, show = true, continueText = 'Continue', continueDisabled = false, backHidden = false, continueHidden = false }) {
@@ -347,6 +349,45 @@ function setSticky({ stepLabel, hint, show = true, continueText = 'Continue', co
 function renderQuestion(item) {
     state.selectedValue = state.answers[item.id] || null;
     const qNumber = questionIndexForStep(state.step);
+    if (item.id === 'q4') {
+        const defaultValue = parseInt(state.answers[item.id] || '5', 10);
+        host.innerHTML = `
+    <section class="screen-card fade-in">
+      <div class="question-meta">
+        <div class="question-label">Question ${qNumber} of ${totalQuestions}</div>
+        <div class="question-tag">${item.tag}</div>
+      </div>
+      <h2 class="question-title">${item.title}</h2>
+      <div class="range-scale">
+        <div class="range-value-row">
+          <span class="range-value-pill">Your answer</span>
+          <strong id="rangeCurrentValue">${defaultValue}</strong>
+        </div>
+        <input id="q4Range" class="range-track" type="range" min="1" max="10" step="1" value="${defaultValue}">
+        <div class="range-endpoints"><span>1</span><span>10</span></div>
+      </div>
+    </section>
+  `;
+        const range = document.getElementById('q4Range');
+        const valueEl = document.getElementById('rangeCurrentValue');
+        const commitValue = (value) => {
+            const normalized = String(value);
+            valueEl.textContent = normalized;
+            state.selectedValue = normalized;
+            state.answers[item.id] = normalized;
+        };
+        range.addEventListener('input', () => commitValue(range.value));
+        commitValue(defaultValue);
+        setSticky({
+            stepLabel: `Question ${qNumber} of ${totalQuestions}`,
+            hint: 'Move the slider and continue.',
+            continueText: 'Continue',
+            continueDisabled: false,
+            continueHidden: false,
+            backHidden: state.step === 0
+        });
+        return;
+    }
     host.innerHTML = `
     <section class="screen-card fade-in">
       <div class="question-meta">
@@ -644,6 +685,7 @@ function renderThinkingBreak() {
         const safeValue = Math.min(target, value);
         riskValueEl.textContent = `${safeValue}%`;
         riskBarEl.style.width = `${safeValue}%`;
+        riskBarEl.classList.toggle('is-hot', safeValue >= 70);
         if (safeValue >= target) {
             clearInterval(timer);
         }
