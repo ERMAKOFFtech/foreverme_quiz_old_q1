@@ -606,7 +606,7 @@ function renderThinkingBreak() {
 
       <div class="thinking-panel">
         <div class="thinking-row">
-          <span>Based on your answers, your Loved One's digital legacy is at risk</span>
+          <span>Based on our calculations, your Loved One's digital legacy risk is high</span>
           <strong id="thinkingRiskValue">0%</strong>
         </div>
         <div class="thinking-bar">
@@ -637,7 +637,7 @@ function renderThinkingBreak() {
 
     const riskValueEl = document.getElementById('thinkingRiskValue');
     const riskBarEl = document.getElementById('thinkingRiskBar');
-    const target = 75;
+    const target = Math.floor(Math.random() * 11) + 75;
     let value = 0;
     const timer = setInterval(() => {
         value += 3;
@@ -650,6 +650,12 @@ function renderThinkingBreak() {
     }, 100);
 
     setTimeout(() => {
+        const thinkingStatuses = Array.from(host.querySelectorAll('.thinking-status-row .status'));
+        thinkingStatuses.forEach((statusEl) => {
+            statusEl.classList.remove('is-loading');
+            statusEl.classList.add('is-done');
+            statusEl.innerHTML = '<span class="done-check" aria-hidden="true">✓</span><span class="status-text">Done</span>';
+        });
         continueBtn.disabled = false;
     }, 3000);
 }
