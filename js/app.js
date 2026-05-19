@@ -47,6 +47,10 @@ const flow = [
         options: Array.from({ length: 10 }, (_, i) => ({ label: String(i + 1), value: String(i + 1) }))
     },
     {
+        type: 'thinking',
+        id: 'thinking_after_q4'
+    },
+    {
         type: 'question', id: 'q5', tag: 'Memory',
         title: 'How often do you notice specific details of your family’s stories starting to blur or fade?',
         options: [
@@ -81,6 +85,10 @@ const flow = [
             { label: '1-2 hours', value: 'opt_2' },
             { label: 'Almost nothing, just silent photos', value: 'opt_3' },
         ]
+    },
+    {
+        type: 'quoteBreak',
+        id: 'quote_after_q8'
     },
     {
         type: 'question', id: 'q9', tag: 'Questions',
@@ -228,6 +236,19 @@ const flow = [
         title: 'What is your name?',
         tag: 'Final step',
         buttonText: 'NEXT'
+    },
+    {
+        type: 'loader',
+        id: 'name_loader',
+        title: 'Preparing your personalized legacy access',
+        description: 'Analyzing your answers and creating an offer tailored for your family.',
+        score: 100,
+        duration: 3000,
+        items: [
+            'Analyzing emotional priorities',
+            'Mapping legacy preservation risk',
+            'Building your personalized offer'
+        ]
     },
     {
         type: 'email',
@@ -578,6 +599,78 @@ function renderInterstitial(item) {
     });
 }
 
+function renderThinkingBreak() {
+    host.innerHTML = `
+    <section class="screen-card thinking-card fade-in">
+      <h2 class="thinking-title">Psychologists identify the "Third Death" as the moment the last living memory of a person vanishes.</h2>
+
+      <div class="thinking-panel">
+        <div class="thinking-row">
+          <span>Based on your answers, your Loved One's digital legacy is at risk</span>
+          <strong id="thinkingRiskValue">0%</strong>
+        </div>
+        <div class="thinking-bar">
+          <span id="thinkingRiskBar"></span>
+        </div>
+      </div>
+
+      <div class="thinking-status-list">
+        <div class="thinking-status-row">
+          <span>We are calculating your Heritage Protection Plan</span>
+          <span class="status is-loading"><span class="status-text">Analyzing</span><span class="pulse-dots"><span></span><span></span><span></span></span></span>
+        </div>
+        <div class="thinking-status-row">
+          <span>Analyzing memory fragility</span>
+          <span class="status is-loading"><span class="status-text">Analyzing</span><span class="pulse-dots"><span></span><span></span><span></span></span></span>
+        </div>
+      </div>
+    </section>
+  `;
+
+    setSticky({
+        stepLabel: 'Assessment in progress',
+        hint: 'Please wait while we complete your interim analysis.',
+        continueText: 'Continue',
+        continueDisabled: true,
+        backHidden: true
+    });
+
+    const riskValueEl = document.getElementById('thinkingRiskValue');
+    const riskBarEl = document.getElementById('thinkingRiskBar');
+    const target = 75;
+    let value = 0;
+    const timer = setInterval(() => {
+        value += 3;
+        const safeValue = Math.min(target, value);
+        riskValueEl.textContent = `${safeValue}%`;
+        riskBarEl.style.width = `${safeValue}%`;
+        if (safeValue >= target) {
+            clearInterval(timer);
+        }
+    }, 100);
+
+    setTimeout(() => {
+        continueBtn.disabled = false;
+    }, 3000);
+}
+
+function renderQuoteBreak() {
+    host.innerHTML = `
+    <section class="screen-card interstitial-card quote-break-card fade-in">
+      <blockquote>"I lost my father 3 months after creating his avatar. Yesterday, my son asked 'Grandpa, what was your favorite thing about being a pilot?' and heard his real voice answer. It’s the best investment I’ve ever made"</blockquote>
+      <cite>Sarah K., 42 · Austin, TX</cite>
+      <button class="interstitial-continue-btn" type="button" id="interstitialContinueBtn">Continue</button>
+    </section>
+  `;
+    document.getElementById('interstitialContinueBtn').addEventListener('click', () => nextStep());
+    setSticky({
+        stepLabel: 'Real family story',
+        hint: 'Continue when you are ready.',
+        continueHidden: true,
+        backHidden: false
+    });
+}
+
 function animateLoader(item) {
     host.innerHTML = `
     <section class="screen-card loader-card fade-in">
@@ -614,7 +707,7 @@ function animateLoader(item) {
     const statusEls = Array.from(host.querySelectorAll('.loader-row .status'));
     const target = parseInt(item.score, 10);
     let current = 0;
-    const intervalStep = Math.max(55, Math.floor(item.duration / Math.max(target, 1)));
+    const intervalStep = Math.max(18, Math.floor(item.duration / Math.max(target, 1)));
     let finalized = false;
 
     const countUp = setInterval(() => {
@@ -1303,6 +1396,8 @@ function renderCurrentStep() {
 
   if (item.type === 'question') return renderQuestion(item);
   if (item.type === 'nameInput') return renderNameInput(item);
+  if (item.type === 'thinking') return renderThinkingBreak();
+  if (item.type === 'quoteBreak') return renderQuoteBreak();
   if (item.type === 'interstitial') return renderInterstitial(item);
   if (item.type === 'loader') return animateLoader(item);
   if (item.type === 'voiceDemo') return renderVoiceDemo();
