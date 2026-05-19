@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ForeverMe — Heritage Protection Quiz</title>
+  <meta name="description" content="Protect the voice, memories, and soul-print of the people your family can’t afford to lose." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="brand-wrap">
+          <img
+            src="assets/img/fme_logo_quiz.svg"
+            alt="ForeverMe"
+            class="brand-logo"
+          >
+          <div id="brandText" class="brand-text-fallback" style="display:none;">ForeverMe</div>
+        </div>
+        <div class="timer-pill" id="timerPill">
+          <span class="timer-dot"></span>
+          <span>Time remaining:</span>
+          <strong id="timerText">10:00</strong>
+        </div>
+      </div>
+      <div class="container">
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="quiz-main">
+      <div class="container quiz-container">
+        <section class="hero-note" id="heroNote">
+          <div class="eyebrow">Protect your family story</div>
+          <h1>Build a voice-and-memory legacy your children can keep forever.</h1>
+          <p>
+            This short assessment helps identify how vulnerable your loved one’s voice,
+            memories, and family stories are — and what to do before they become impossible to recover.
+          </p>
+        </section>
+
+        <section id="screenHost"></section>
+      </div>
+    </main>
+
+    <div class="sticky-action-bar" id="stickyBar">
+      <div class="container sticky-inner">
+        <div class="sticky-copy" id="stickyCopy">
+          <div class="sticky-step" id="stickyStep">Question 1 of 9</div>
+          <div class="sticky-hint" id="stickyHint">Choose the answer that feels most true right now.</div>
+        </div>
+        <div class="sticky-actions">
+          <button class="btn btn-light btn-ghost" id="backBtn" type="button">Back</button>
+          <button class="btn btn-dark btn-main" id="continueBtn" type="button" disabled>Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/app.js"></script>
+  
+  <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
+  <script>
+    window.LemonSqueezy && LemonSqueezy.Setup({
+      eventHandler: (event) => {
+        if (event.event === 'Checkout.Success') {
+          const orderId = event.data?.id;
+  
+          window.location.href = '/quiz-payment-success?order_id=' + orderId;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
