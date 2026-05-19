@@ -3,7 +3,7 @@ const flow = [
         type: 'interstitial',
         id: 'intro',
         title: 'Welcome',
-        image: 'img/before_quiz_final.jpg',
+        image: '/assets/quiz/start-welcome-trial/img/fme_welcome_quiz.jpeg',
         heading: `Don't just remember them.<br>Talk with them`,
         body: [
             '25 Questions. One Eternal Memory.',
