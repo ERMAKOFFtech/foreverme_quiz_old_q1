@@ -1,306 +1,233 @@
 const flow = [
     {
-        type: 'ageGate',
-        id: 'ageGate',
-        title: 'Choose your age group',
-        note: 'By continuing, you confirm you have read and agreed to our <a href="/privacy">Terms of Use</a>, Privacy Policy, and Refund Policy.',
-        options: [
-            { label: '25-49', value: '25_49' },
-            { label: '50-59', value: '50_59' },
-            { label: '60-69', value: '60_69' },
-            { label: '70+', value: '70_plus' }
-        ]
+        type: 'interstitial',
+        id: 'intro',
+        title: 'Welcome',
+        image: 'img/before_quiz_final.jpg',
+        heading: `Don't just remember them.<br>Talk with them`,
+        body: [
+            '25 Questions. One Eternal Memory.',
+            '3-minute quiz.'
+        ],
+        buttonText: 'Continue'
     },
     {
         type: 'question',
         id: 'q1',
-        title: 'Genders',
-        tag: 'Profile setup',
-        options: [
-            { label: 'Male', value: 'male', icon: '👨' },
-            { label: 'Female', value: 'female', icon: '👩' },
-        ]
-    },
-    {
-        type: 'interstitial',
-        id: 'socialProofCollage',
-        layout: 'collage',
-        title: 'Social proof',
-        heading: 'Over 100,000 people have chosen us',
-        buttonText: 'Continue'
-    },
-    {
-        type: 'question',
-        id: 'q2',
-        title: 'Do you consider yourself a good son/daughter?',
-        tag: 'Self reflection',
-        options: [
-            { label: 'Yes', value: 'yes' },
-            { label: 'No', value: 'no' },
-            { label: 'I don’t know', value: 'dont_know' }
-        ]
-    },
-    {
-        type: 'interstitial',
-        title: 'Reflection note',
-        image: '/assets/quiz/start-welcome-trial/img/spec_pause_1.jpg',
-        heading: 'Good people make the world a better place!',
-        body: [
-            'We’re glad you are here.',
-            'This journey is intended to help you better understand your patterns and structure your experiences.',
-            'We recommend treating this quiz as a moment of honest reflection on your loved ones and your own essence and heritage.'
-        ],
-        buttonText: 'Continue'
-    },
-    {
-        type: 'question',
-        id: 'q3',
-        title: 'How often do you miss the loved ones you’ve lost?',
-        tag: 'Loss frequency',
-        options: [
-            { label: 'Constantly', value: 'constantly' },
-            { label: 'Frequently', value: 'frequently' },
-            { label: 'From time to time', value: 'sometimes' },
-            { label: 'Occasionally', value: 'occasionally' },
-            { label: 'Never', value: 'never' },
-            { label: 'I’ve never lost anyone', value: 'never_lost_anyone' }
-        ]
-    },
-    {
-        type: 'interstitial',
-        title: 'Thank you',
-        image: '/assets/quiz/start-welcome-trial/img/spec_pause_2.jpg',
-        heading: 'Thank you!',
-        body: ['Thank you for your remarkable honesty. We’re nearly finished!'],
-        buttonText: 'Continue'
-    },
-    {
-        type: 'question',
-        id: 'q4',
-        title: 'Have you ever experienced the grief of losing a loved one?',
-        tag: 'Grief experience',
-        options: [
-            { label: 'Yes, it is a lifelong pain.', value: 'yes_lifelong_pain' },
-            { label: 'No, but I am afraid of it happening.', value: 'no_afraid' },
-            { label: 'I don’t know.', value: 'dont_know' }
-        ]
-    },
-    {
-        type: 'interstitial',
-        title: 'Support note',
-        sliderImages: [
-            '/assets/quiz/start-welcome-trial/img/spec_pause_3_1.jpg',
-            '/assets/quiz/start-welcome-trial/img/spec_pause_3_2.jpg',
-            '/assets/quiz/start-welcome-trial/img/spec_pause_3_3.jpg'
-        ],
-        quote: 'You’re not alone. We created ForeverMe to support you.',
-        buttonText: 'Continue'
-    },
-    {
-        type: 'question',
-        id: 'q5',
         title: 'Whose legacy and wisdom do you wish to preserve for eternity?',
-        tag: 'Legacy focus',
+        tag: 'Legacy',
         options: [
+            { label: 'My Parent', value: 'my_parent' },
             { label: 'Myself', value: 'myself' },
-            { label: 'My Loved One', value: 'my_loved_one' }
+            { label: 'My Spouse', value: 'my_spouse' },
+            { label: 'A close loved one', value: 'close_loved_one' }
         ]
     },
     {
-        type: 'interstitial',
-        title: 'Customer story',
-        image: '/assets/quiz/start-welcome-trial/img/pause_1.jpg',
-        quote: 'I lost my father 3 months after creating his avatar. Yesterday, my son asked "Grandpa, what was your favorite thing about being a pilot?" and heard his real voice answer. It’s the best investment I’ve ever made.',
-        cite: 'Sarah K., 42 • Austin, TX'
+        type: 'question', id: 'q2', tag: 'Value',
+        title: 'If you could ask a late grandparent one life question right now, how valuable would their answer be?',
+        options: [
+            { label: 'Priceless', value: 'priceless' },
+            { label: 'Extremely Important', value: 'extremely_important' },
+            { label: 'Just curious', value: 'just_curious' }
+        ]
     },
     {
-        type: 'question',
-        id: 'q6',
-        title: 'Do you believe a silent photograph is enough to convey a “soul” to someone who never met them?',
-        tag: 'Emotional depth',
+        type: 'question', id: 'q3', tag: 'Soul',
+        title: 'Do you believe a silent photograph is enough to convey a "soul" to someone who never met them?',
         options: [
-            { label: 'No, a photo is too quiet', value: 'photo_quiet' },
+            { label: 'No, a photo is too quiet', value: 'photo_too_quiet' },
             { label: 'I want them to hear the voice', value: 'hear_voice' },
             { label: 'I want more than just an image', value: 'more_than_image' }
         ]
     },
     {
-        type: 'interstitial',
-        title: 'Why people wait too long',
-        image: '/assets/quiz/start-welcome-trial/img/pause_2.jpg',
-        quote: '47% of people deeply regret not having recorded meaningful conversations with loved ones before it was too late.',
-        cite: 'YouGov Survey'
+        type: 'question', id: 'q4', tag: 'Recall',
+        title: 'On a scale of 1–10, how accurately could you recall Your Loved One’s unique laugh in your mind right now?',
+        options: Array.from({ length: 10 }, (_, i) => ({ label: String(i + 1), value: String(i + 1) }))
     },
     {
-        type: 'question',
-        id: 'q7',
-        title: 'Whose voice are you most afraid of losing?',
-        tag: 'Voice preservation',
+        type: 'question', id: 'q5', tag: 'Memory',
+        title: 'How often do you notice specific details of your family’s stories starting to blur or fade?',
         options: [
-            { label: 'My Mom’s', value: 'mom' },
-            { label: 'My Dad’s', value: 'dad' },
-            { label: 'My Spouse', value: 'spouse' },
-            { label: 'A person who is the heart of our family', value: 'heart_of_family' }
+            { label: 'Frequently', value: 'opt_1' },
+            { label: 'Occasionally', value: 'opt_2' },
+            { label: 'I remember everything (but I’m afraid)', value: 'opt_3' },
         ]
     },
     {
-        type: 'interstitial',
-        title: 'What fades first',
-        image: '/assets/quiz/start-welcome-trial/img/pause_3.jpg',
-        quote: 'Psychological studies show that “Voice Memory” is the first thing to fade after loss, yet it\'s the strongest trigger for feeling a loved one\'s presence.',
-        cite: 'Journal of Emotional Science'
-    },
-    {
-        type: 'question',
-        id: 'q8',
-        title: 'If you lost your phone today, what percentage of your loved one\'s “digital soul” would be deleted forever?',
-        tag: 'Risk exposure',
+        type: 'question', id: 'q6', tag: 'Guilt',
+        title: 'Do you feel "digital guilt" having 5,000 photos of food, but less than 10 mins of Your Loved One speaking from the heart?',
         options: [
-            { label: 'Almost everything', value: 'almost_everything' },
-            { label: 'A huge part', value: 'huge_part' },
-            { label: 'I have no backups', value: 'no_backups' }
+            { label: 'Yes, I feel it', value: 'opt_1' },
+            { label: 'No, but I need more', value: 'opt_2' },
+            { label: 'I never thought about it', value: 'opt_3' },
         ]
     },
     {
-        type: 'interstitial',
-        title: 'Digital guilt is real',
-        image: '/assets/quiz/start-welcome-trial/img/pause_4.jpg',
-        quote: '72% of people over 40 admit to “Digital Guilt”: having 5,000 photos of food and pets, but less than 10 minutes of their parents speaking from the heart.',
-        cite: 'Consumer digital-memory research'
-    },
-    {
-        type: 'question',
-        id: 'q9',
-        title: 'What is that one thing your children MUST experience about Your Loved One?',
-        tag: 'What must survive',
+        type: 'question', id: 'q7', tag: 'Risk',
+        title: "How much of Your Loved One's essence is lost in unorganized digital clutter that your children will never sift through?",
         options: [
-            { label: 'The unique humor', value: 'humor' },
-            { label: 'Their comforting wisdom', value: 'wisdom' },
-            { label: 'The way they tell family stories', value: 'stories' },
-            { label: 'Their advice', value: 'advice' },
-            { label: 'I don’t know', value: 'dont_know' }
+            { label: 'Over 90% (it’s a mess)', value: 'opt_1' },
+            { label: 'About half', value: 'opt_2' },
+            { label: 'Most is only in my head', value: 'opt_3' },
         ]
     },
     {
-        type: 'interstitial',
-        title: 'Why family story matters',
-        image: '/assets/quiz/start-welcome-trial/img/pause_5.jpg',
-        quote: 'Children who know their family history show higher levels of resilience and a stronger sense of self during life\'s challenges.',
-        cite: 'Emory University Study'
-    },
-    {
-        type: 'question',
-        id: 'q10',
-        title: 'Family stories often vanish within 2–3 generations. Are you okay with your loved one becoming just a silent name?',
-        tag: 'Generational loss',
+        type: 'question', id: 'q8', tag: 'Archive',
+        title: 'How many hours of high-quality audio of Your Loved Ones sharing life lessons do you actually own?',
         options: [
-            { label: 'No, I want their story to live', value: 'story_live' },
-            { label: 'I want my grandkids to know them', value: 'grandkids_know' }
+            { label: '10+ hours', value: 'opt_1' },
+            { label: '1-2 hours', value: 'opt_2' },
+            { label: 'Almost nothing, just silent photos', value: 'opt_3' },
         ]
     },
     {
-        type: 'interstitial',
-        title: 'What people don\'t know',
-        image: '/assets/quiz/start-welcome-trial/img/pause_6.jpg',
-        quote: '36% of adults say they know almost nothing about their grandparents\' lives beyond their names and professions.',
-        cite: 'Entrepreneur Magazine Research'
-    },
-    {
-        type: 'question',
-        id: 'q11',
-        title: 'Do you have a “Plan B” to prevent your family\'s oral history from being erased by time?',
-        tag: 'Preparedness',
+        type: 'question', id: 'q9', tag: 'Questions',
+        title: 'How many "unasked questions" do you have for your parents that you keep putting off for "later"?',
         options: [
-            { label: 'Not yet', value: 'not_yet' },
-            { label: 'I\'m looking for one', value: 'looking' },
-            { label: 'This is my Plan B', value: 'plan_b' }
+            { label: 'Too many to count', value: 'opt_1' },
+            { label: 'A few critical ones', value: 'opt_2' },
+            { label: 'I ask everything', value: 'opt_3' },
         ]
     },
     {
-        type: 'interstitial',
-        title: 'Intent vs action',
-        image: '/assets/quiz/start-welcome-trial/img/pause_7.jpg',
-        quote: '84% of Americans state that preserving their heritage is a top priority, yet only 5% have a secure digital plan for it.',
-        cite: 'Ancestry Survey'
+        type: 'question', id: 'q10', tag: 'Future',
+        title: 'Imagine your grandchildren 30 years from now. How well will they know the voice and character of Your Loved One?',
+        options: [
+            { label: "Won't know at all", value: 'opt_1' },
+            { label: 'Only through photos', value: 'opt_2' },
+            { label: 'Through ForeverMe', value: 'opt_3' },
+        ]
     },
     {
-        type: 'question',
-        id: 'q12',
+        type: 'question', id: 'q11', tag: 'Support',
+        title: 'If your child faces a major life crisis, how much would Your Loved One’s voice of encouragement mean to them?',
+        options: [
+            { label: 'Everything', value: 'opt_1' },
+            { label: 'A lot', value: 'opt_2' },
+            { label: 'Not sure', value: 'opt_3' },
+        ]
+    },
+    {
+        type: 'question', id: 'q12', tag: 'Legacy risk',
+        title: 'Family stories often vanish within 3 generations. Are you okay with Your Loved One becoming just a silent name?',
+        options: [
+            { label: 'No, I will secure it', value: 'opt_1' },
+            { label: 'I am worried', value: 'opt_2' },
+            { label: 'Yes', value: 'opt_3' },
+        ]
+    },
+    {
+        type: 'question', id: 'q13', tag: 'Mentor value',
+        title: 'What is the value of a mentor who knows you perfectly and can guide your descendants forever?',
+        options: [
+            { label: 'Priceless', value: 'opt_1' },
+            { label: 'Worth thousands', value: 'opt_2' },
+            { label: 'Hard to say', value: 'opt_3' },
+        ]
+    },
+    {
+        type: 'question', id: 'q14', tag: 'Spending',
+        title: 'How much does your family typically spend on a single weekend dinner that is forgotten by Monday?',
+        options: [
+            { label: 'Less than $50', value: 'opt_1' },
+            { label: 'More than $50', value: 'opt_2' },
+        ]
+    },
+    {
+        type: 'question', id: 'q15', tag: 'Priority',
+        title: 'Is a permanent digital bridge to your ancestors more valuable than one night of dining out?',
+        options: [
+            { label: 'Definitely yes', value: 'opt_1' },
+            { label: 'Probably', value: 'opt_2' },
+            { label: 'No', value: 'opt_3' },
+        ]
+    },
+    {
+        type: 'question', id: 'q16', tag: 'Worth',
+        title: 'If you could pay for one more hour with a loved one who is gone, what would that hour be worth to you?',
+        options: [
+            { label: '$1,000+', value: 'opt_1' },
+            { label: '$100', value: 'opt_2' },
+            { label: 'Any amount', value: 'opt_3' },
+        ]
+    },
+    {
+        type: 'question', id: 'q17', tag: 'Guidance',
+        title: 'In a moment of crisis, is there one person whose calm guidance would be most irreplaceable?',
+        options: [
+            { label: 'Yes, Your Loved One', value: 'opt_1' },
+            { label: 'Multiple people', value: 'opt_2' },
+            { label: 'No', value: 'opt_3' },
+        ]
+    },
+    {
+        type: 'question', id: 'q18', tag: 'Plan B',
+        title: 'Do you have a "Plan B" to prevent your family\'s oral history from being erased by time?',
+        options: [
+            { label: 'No', value: 'opt_1' },
+            { label: 'I thought photos were enough', value: 'opt_2' },
+            { label: 'Yes', value: 'opt_3' },
+        ]
+    },
+    {
+        type: 'question', id: 'q19', tag: 'Reflection',
+        title: 'When was the last time you thought: "I wish I could hear exactly what Your Loved One would say about this"?',
+        options: [
+            { label: 'Constantly', value: 'opt_1' },
+            { label: 'In times of crisis', value: 'opt_2' },
+            { label: 'Occasionally', value: 'opt_3' },
+        ]
+    },
+    {
+        type: 'question', id: 'q20', tag: 'Backup',
+        title: "If you lost your phone today, what percentage of Your Loved One's digital soul would be deleted forever?",
+        options: [
+            { label: '100% (High risk)', value: 'opt_1' },
+            { label: 'Over 50%', value: 'opt_2' },
+            { label: 'I have backups', value: 'opt_3' },
+        ]
+    },
+    {
+        type: 'question', id: 'q21', tag: 'Urgency',
         title: 'How much would you regret not capturing their essence while their mind and memory are still sharp?',
-        tag: 'Urgency',
         options: [
-            { label: 'It\'s my biggest fear', value: 'biggest_fear' },
-            { label: 'I can\'t let this moment slip away', value: 'cant_let_slip' }
+            { label: 'Deeply regret', value: 'opt_1' },
+            { label: 'Somewhat', value: 'opt_2' },
+            { label: 'Not sure', value: 'opt_3' },
         ]
     },
     {
-        type: 'interstitial',
-        title: 'Fear of loss',
-        image: '/assets/quiz/start-welcome-trial/img/pause_8.jpg',
-        quote: '68% of people list “The death of a loved one” as their #1 fear. Capturing their essence is the only known way to achieve “Digital Peace of Mind”.',
-        cite: 'Chapman University Survey'
-    },
-    {
-        type: 'question',
-        id: 'q13',
-        title: 'If your child faces a major life crisis in 20 years, how much would this voice of encouragement mean to them?',
-        tag: 'Future meaning',
+        type: 'question', id: 'q22', tag: 'Commitment',
+        title: 'Are you ready to invest 30 minutes today to ensure Your Loved One’s presence remains in your family forever?',
         options: [
-            { label: 'It would be everything', value: 'everything' },
-            { label: 'It\'s the best gift I can leave them', value: 'best_gift' }
+            { label: "Yes, I'm ready", value: 'opt_1' },
+            { label: "I'll risk it later", value: 'opt_2' },
         ]
     },
     {
-        type: 'interstitial',
-        title: 'What inheritance really means',
-        image: '/assets/quiz/start-welcome-trial/img/pause_9.jpg',
-        quote: '70% of participants in a legacy study believe that hearing a parent\'s advice after they are gone is more valuable than any financial inheritance.',
-        cite: 'IPSOS Survey'
-    },
-    {
-        type: 'interstitial',
-        title: 'Featured in',
-        heading: 'ForeverMe featured in:',
-        subQuote: 'Technology is reshaping how people navigate their existential and heritage challenges, and the most valuable tools aren\'t just informative, they\'re actionable. Apps like ForeverMe are part of that shift',
-        logoImages: [
-            '/assets/quiz/start-welcome-trial/img/magazine_logo_1.jpeg',
-            '/assets/quiz/start-welcome-trial/img/magazine_logo_2.jpeg',
-            '/assets/quiz/start-welcome-trial/img/magazine_logo_3.jpeg',
-            '/assets/quiz/start-welcome-trial/img/magazine_logo_4.jpeg',
-            '/assets/quiz/start-welcome-trial/img/magazine_logo_5.jpeg',
-            '/assets/quiz/start-welcome-trial/img/magazine_logo_6.jpeg'
-        ],
-        logosStyle: 'floating',
-        buttonText: 'Continue'
-    },
-    {
-        type: 'loader',
-        id: 'loader1',
-        duration: 7600,
-        title: 'Psychologists identify the “Third Death” as the moment the last living memory of a person vanishes.',
-        description: 'Based on your answers, Your Loved One’s digital legacy is at risk.\nWe are calculating your Heritage Protection Plan.',
-        score: '81%',
-        items: [
-            'Analyzing …',
-            'Analyzing Memory Fragility',
-            'Analyzing …'
+        type: 'question', id: 'q23', tag: 'Decision',
+        title: 'Will you be the generation that lets your family line go silent for the sake of $49?',
+        options: [
+            { label: 'No, I will secure the legacy', value: 'opt_1' },
+            { label: 'I am still undecided', value: 'opt_2' },
         ]
     },
     {
-        type: 'interstitial',
-        title: 'Research foundations',
-        heading: 'ForeverMe was developed based on decades of evidence-based scientific research and artificial intelligence studies of:',
-        logoImages: [
-            '/assets/quiz/start-welcome-trial/img/univer_1.png',
-            '/assets/quiz/start-welcome-trial/img/univer_2.png',
-            '/assets/quiz/start-welcome-trial/img/univer_3.png'
-        ],
-        logosStyle: 'stack',
-        buttonText: 'Continue'
+        type: 'question', id: 'q24', tag: 'Choice',
+        title: 'Will you witness the "Digital Resurrection" of your history, or let it fade into gray?',
+        options: [
+            { label: 'SECURE LEGACY NOW', value: 'opt_1' },
+            { label: 'Fade away', value: 'opt_2' },
+        ]
     },
     {
-        type: 'voiceDemo',
-        id: 'voiceDemo'
+        type: 'nameInput',
+        id: 'q25',
+        title: 'What is your name?',
+        tag: 'Final step',
+        buttonText: 'NEXT'
     },
     {
         type: 'email',
@@ -335,7 +262,7 @@ const heroNote = document.getElementById('heroNote');
 const timerText = document.getElementById('timerText');
 const timerPill = document.getElementById('timerPill');
 
-const totalQuestions = flow.filter(item => item.type === 'question').length;
+const totalQuestions = flow.filter(item => item.type === 'question' || item.type === 'nameInput').length;
 let timerSeconds = 10 * 60;
 let timerInterval = null;
 let promoTimerInterval = null;
@@ -366,7 +293,7 @@ function startTimer() {
 function questionIndexForStep(step) {
     let count = 0;
     for (let i = 0; i <= step; i++) {
-        if (flow[i].type === 'question') count += 1;
+        if (flow[i].type === 'question' || flow[i].type === 'nameInput') count += 1;
     }
     return count;
 }
@@ -451,6 +378,40 @@ function renderQuestion(item) {
         hint: 'Choose the answer that feels most true right now.',
         continueHidden: true,
         backHidden: state.step === 0
+    });
+}
+
+
+function renderNameInput(item) {
+    const currentValue = state.answers[item.id] || '';
+    host.innerHTML = `
+    <section class="screen-card fade-in">
+      <div class="question-meta">
+        <div class="question-label">Question ${questionIndexForStep(state.step)} of ${totalQuestions}</div>
+        <div class="question-tag">${item.tag || 'Final step'}</div>
+      </div>
+      <h2 class="question-title">${item.title}</h2>
+      <div class="mt-3">
+        <input id="nameInput" class="form-control form-control-lg" placeholder="Type your name" value="${currentValue.replace(/"/g, '&quot;')}">
+      </div>
+    </section>
+  `;
+
+    const input = document.getElementById('nameInput');
+    const update = () => {
+        const value = input.value.trim();
+        state.answers[item.id] = value;
+        continueBtn.disabled = value.length === 0;
+    };
+    input.addEventListener('input', update);
+
+    setSticky({
+        stepLabel: `Question ${questionIndexForStep(state.step)} of ${totalQuestions}`,
+        hint: 'Enter your name to continue.',
+        continueText: item.buttonText || 'NEXT',
+        continueDisabled: !currentValue,
+        backHidden: false,
+        continueHidden: false
     });
 }
 
@@ -1338,10 +1299,10 @@ function renderCurrentStep() {
   stopInterstitialSlider();
 
   const item = flow[state.step];
-  heroNote.classList.toggle('hidden', state.step > 0 || item.type === 'ageGate');
+  heroNote.classList.add('hidden');
 
   if (item.type === 'question') return renderQuestion(item);
-  if (item.type === 'ageGate') return renderAgeGate(item);
+  if (item.type === 'nameInput') return renderNameInput(item);
   if (item.type === 'interstitial') return renderInterstitial(item);
   if (item.type === 'loader') return animateLoader(item);
   if (item.type === 'voiceDemo') return renderVoiceDemo();
@@ -1359,21 +1320,9 @@ function nextStep() {
         }
     }
 
-  if (current?.type === 'question' && current.id === 'q1' && state.answers.q1 === 'myself') {
-    const existing = flow.findIndex(item => item.id === 'selfRedirect');
-    if (existing === -1) {
-      flow.splice(state.step + 1, 0, { type: 'selfRedirect', id: 'selfRedirect' });
-    }
-  }
-
   if (state.step < flow.length - 1) {
     state.step += 1;
     const next = flow[state.step];
-    if (next.type === 'selfRedirect') {
-      renderSelfRedirect();
-      updateProgress();
-      return;
-    }
     renderCurrentStep();
   }
 }
@@ -1387,12 +1336,6 @@ function prevStep() {
 
 
   if (state.step < 0) state.step = 0;
-  const current = flow[state.step];
-  if (current.type === 'selfRedirect') {
-    renderSelfRedirect();
-    updateProgress();
-    return;
-  }
   renderCurrentStep();
 }
 
