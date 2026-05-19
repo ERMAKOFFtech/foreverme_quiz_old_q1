@@ -243,7 +243,7 @@ const flow = [
         title: 'Preparing your personalized legacy access',
         description: 'Analyzing your answers and creating an offer tailored for your family.',
         score: 100,
-        duration: 3000,
+        duration: 4500,
         items: [
             'Analyzing emotional priorities',
             'Mapping legacy preservation risk',
@@ -288,7 +288,12 @@ let timerSeconds = 10 * 60;
 let timerInterval = null;
 let promoTimerInterval = null;
 let interstitialSliderInterval = null;
-gtag('event', 'quiz_started', {
+const GA_EVENT_SUFFIX = '_old_q1';
+const trackEvent = (eventName, params = {}) => {
+    gtag('event', `${eventName}${GA_EVENT_SUFFIX}`, params);
+};
+
+trackEvent('quiz_started', {
     quiz_name: 'personality_quiz',
     total_questions: totalQuestions
 });
@@ -360,14 +365,29 @@ function renderQuestion(item) {
       <div class="range-scale">
         <input id="q4Range" class="range-track" type="range" min="1" max="10" step="1" value="${defaultValue}">
         <div class="range-endpoints"><span>1</span><span>10</span></div>
+        <div class="range-current-option" id="q4CurrentOption"></div>
       </div>
     </section>
   `;
         const range = document.getElementById('q4Range');
+        const q4MeaningMap = {
+            '1': 'Almost impossible to recall',
+            '2': 'Very hard to recall',
+            '3': 'I barely remember it',
+            '4': 'Only vague memory',
+            '5': 'I remember some details',
+            '6': 'Fairly clear in my mind',
+            '7': 'Mostly accurate recall',
+            '8': 'Very clear recall',
+            '9': 'Extremely accurate',
+            '10': 'Perfectly clear right now'
+        };
+        const q4CurrentOption = document.getElementById('q4CurrentOption');
         const commitValue = (value) => {
             const normalized = String(value);
             state.selectedValue = normalized;
             state.answers[item.id] = normalized;
+            q4CurrentOption.textContent = q4MeaningMap[normalized];
         };
         range.addEventListener('input', () => commitValue(range.value));
         commitValue(defaultValue);
@@ -411,7 +431,7 @@ function renderQuestion(item) {
             const progressPercent = Math.round((qNumber / totalQuestions) * 100);
 
 
-                gtag('event', 'quiz_question_answered', {
+                trackEvent('quiz_question_answered', {
                     quiz_name: 'personality_quiz',
                     question_number: qNumber,
                     question_key: item.id,
@@ -970,19 +990,10 @@ function renderEmail() {
       </p>
       <div class="promo-code-banner mb-4" id="promoCodeBanner">
         <div class="promo-code-headline">Your Enhanced Trial Code</div>
-        <div class="promo-code-row">
-          <div class="promo-code-value">${randomPromoCode}</div>
-          <button class="promo-apply-btn" type="button" id="promoApplyBtn">
-            <span class="promo-apply-icon" aria-hidden="true">✓</span>
-            <span>Apply</span>
-          </button>
-        </div>
-        <div class="promo-timer-wrap" id="promoTimerWrap">
-          <div class="promo-timer-bar" id="promoTimerBar"></div>
-        </div>
-        <div class="promo-code-label" id="promoTimerLabel">Promo code active: 60 sec</div>
+        <div class="promo-code-value">${randomPromoCode}</div>
+        <div class="promo-code-label">Promo code applied</div>
       </div>
-      <div class="promo-applied-note hidden" id="promoAppliedNote">This promo code gave you increased trial limits.</div>
+      <div class="promo-applied-note" id="promoAppliedNote">This promo code gave you increased trial limits.</div>
 
       <div class="mb-3">
         <label class="form-label-soft" for="emailInput">Email address</label>
@@ -1006,43 +1017,10 @@ function renderEmail() {
   `;
 
   const input = document.getElementById('emailInput');
-  const promoApplyBtn = document.getElementById('promoApplyBtn');
-  const promoTimerBar = document.getElementById('promoTimerBar');
-  const promoTimerWrap = document.getElementById('promoTimerWrap');
-  const promoTimerLabel = document.getElementById('promoTimerLabel');
-  const promoCodeBanner = document.getElementById('promoCodeBanner');
-  const promoAppliedNote = document.getElementById('promoAppliedNote');
-
   if (promoTimerInterval) {
     clearInterval(promoTimerInterval);
     promoTimerInterval = null;
   }
-
-  let promoRemainingSeconds = 60;
-  promoTimerBar.style.width = '100%';
-  promoTimerInterval = setInterval(() => {
-    promoRemainingSeconds = Math.max(0, promoRemainingSeconds - 1);
-    const pct = (promoRemainingSeconds / 60) * 100;
-    promoTimerBar.style.width = `${pct}%`;
-    promoTimerLabel.textContent = `Promo code active: ${promoRemainingSeconds} sec`;
-    if (promoRemainingSeconds === 0) {
-      clearInterval(promoTimerInterval);
-      promoTimerInterval = null;
-      promoTimerLabel.textContent = 'Last chance !';
-    }
-  }, 1000);
-
-  promoApplyBtn.addEventListener('click', () => {
-    if (promoTimerInterval) {
-      clearInterval(promoTimerInterval);
-      promoTimerInterval = null;
-    }
-    promoTimerWrap.classList.add('hidden');
-    promoApplyBtn.disabled = true;
-    promoCodeBanner.classList.add('promo-code-applied');
-    promoTimerLabel.textContent = 'Promo code applied';
-    promoAppliedNote.classList.remove('hidden');
-  });
 
     const validate = () => {
         state.email = input.value.trim();
@@ -1387,7 +1365,7 @@ async function handleStripeSubmit() {
             if (error) {
                 showToast(error.message, 'danger');
             } else if (paymentIntent.status === 'succeeded') {
-                gtag('event', 'quiz_purchase_complete', {
+                trackEvent('quiz_purchase_complete', {
                     value: 29.99,
                     currency: 'USD',
                     transaction_id: paymentIntent.id
@@ -1581,7 +1559,7 @@ window.addEventListener('beforeunload', function() {
         const completionRate = Math.round((answeredQuestionsCount / totalQuestions) * 100);
 
 
-            gtag('event', 'quiz_abandoned', {
+            trackEvent('quiz_abandoned', {
                 quiz_name: 'personality_quiz',
                 last_question: lastQuestionNumber,
                 total_questions: totalQuestions,
@@ -1613,7 +1591,7 @@ window.registerUser = async function() {
 
             const totalAnswersCount = Object.keys(state.answers).filter(key => state.answers[key] !== null && state.answers[key] !== undefined).length;
 
-                gtag('event', 'quiz_registration_completed', {
+                trackEvent('quiz_registration_completed', {
                     quiz_name: 'personality_quiz',
                     user_id: response.data.user?.user_id || response.data.user?.id || null,
                     email: email,
@@ -1625,7 +1603,7 @@ window.registerUser = async function() {
             setTimeout(() => {
                 showLoading(false);
             }, 500);
-                gtag('event', 'quiz_all_questions_completed', {
+                trackEvent('quiz_all_questions_completed', {
                     quiz_name: 'personality_quiz',
                     total_questions: totalQuestions
                 });

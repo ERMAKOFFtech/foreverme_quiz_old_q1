@@ -891,7 +891,7 @@ body {
 .promo-code-banner {
     border-radius: 16px;
     padding: 12px 14px;
-    background: linear-gradient(45deg, #BA5EE5 0%, #ECB884 100%);
+    background: linear-gradient(45deg, #0f9f65 0%, #5dcf9c 100%);
     color: #fff;
 }
 .promo-code-headline {
@@ -900,13 +900,6 @@ body {
     letter-spacing: 0.04em;
     text-transform: uppercase;
     opacity: 0.92;
-}
-.promo-code-row {
-    margin-top: 8px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
 }
 .promo-code-label {
     font-size: 0.78rem;
@@ -917,6 +910,7 @@ body {
     margin-top: 8px;
 }
 .promo-code-value {
+    margin-top: 8px;
     font-size: 1.05rem;
     font-weight: 800;
     letter-spacing: 0.04em;
@@ -1385,6 +1379,12 @@ body {
 .range-scale {
     display: grid;
     gap: 10px;
+}
+.range-current-option {
+    text-align: center;
+    color: #4b5563;
+    font-size: 0.95rem;
+    font-weight: 600;
 }
 .range-value-row {
     display: flex;
