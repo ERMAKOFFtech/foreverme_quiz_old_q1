@@ -983,11 +983,7 @@ function renderEmail() {
 
   host.innerHTML = `
     <section class="screen-card email-card fade-in">
-      <div class="eyebrow">Your access point</div>
-      <h2 class="question-title">Get your free trial access</h2>
-      <p class="form-note mb-4">
-        Start your free trial.
-      </p>
+      <div class="eyebrow">Start your free trial</div>
       <div class="promo-code-banner mb-4" id="promoCodeBanner">
         <div class="promo-code-headline">Your Enhanced Trial Code</div>
         <div class="promo-code-value">${randomPromoCode}</div>
@@ -998,9 +994,6 @@ function renderEmail() {
       <div class="mb-3">
         <label class="form-label-soft" for="emailInput">Email address</label>
         <input type="email" class="form-control form-control-xl" id="emailInput" placeholder="name@email.com" value="${state.email || ''}">
-      </div>
-      <div class="form-note">
-        By continuing, you agree to receive access instructions, onboarding emails, and your customized Heritage Protection Plan.
       </div>
 
       <div class="assurance-grid">
@@ -1093,16 +1086,14 @@ function renderPaywall() {
 
       <div class="paywall-block">
         <h3>What you get & plan details</h3>
-        <p class="plan-price-line">$29.99 / month after the trial</p>
         <ul class="plan-list">
           <li>Avatar Setup create your avatar and start chatting right away</li>
           <li>Essential plan with full access to chat and storage features</li>
-          <li>3-day free trial, then billed monthly at $29.99</li>
+          <li>3-day free trial</li>
           <li>10,000 text characters</li>
           <li>45 voice minutes</li>
           <li>10 photo uploads</li>
         </ul>
-        <p class="form-note">Trial lasts 3 days. Cancel anytime to avoid charges. After the trial, your subscription renews monthly at $29.99.</p>
       </div>
 
       <div class="paywall-block">
