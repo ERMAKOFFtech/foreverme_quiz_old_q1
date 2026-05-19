@@ -333,7 +333,6 @@ function updateProgress() {
     }
     const safeProgress = Math.max(4, value);
     progressFill.style.width = `${safeProgress}%`;
-    progressFill.classList.toggle('is-hot', safeProgress >= 70);
 }
 
 function setSticky({ stepLabel, hint, show = true, continueText = 'Continue', continueDisabled = false, backHidden = false, continueHidden = false }) {
