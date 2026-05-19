@@ -359,20 +359,14 @@ function renderQuestion(item) {
       </div>
       <h2 class="question-title">${item.title}</h2>
       <div class="range-scale">
-        <div class="range-value-row">
-          <span class="range-value-pill">Your answer</span>
-          <strong id="rangeCurrentValue">${defaultValue}</strong>
-        </div>
         <input id="q4Range" class="range-track" type="range" min="1" max="10" step="1" value="${defaultValue}">
         <div class="range-endpoints"><span>1</span><span>10</span></div>
       </div>
     </section>
   `;
         const range = document.getElementById('q4Range');
-        const valueEl = document.getElementById('rangeCurrentValue');
         const commitValue = (value) => {
             const normalized = String(value);
-            valueEl.textContent = normalized;
             state.selectedValue = normalized;
             state.answers[item.id] = normalized;
         };
