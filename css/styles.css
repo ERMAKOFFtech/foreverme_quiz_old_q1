@@ -1433,6 +1433,14 @@ body {
     font-size: 0.82rem;
     font-weight: 600;
 }
+
+.range-current-label {
+    margin-top: 12px;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: #374151;
+    text-align: center;
+}
 .voice-result audio { width:100%; margin:8px 0 10px; }
 .voice-result-title { font-weight:700; }
 @keyframes pulse { 0%,100%{opacity:.35} 50%{opacity:1} }

@@ -243,7 +243,7 @@ const flow = [
         title: 'Preparing your personalized legacy access',
         description: 'Analyzing your answers and creating an offer tailored for your family.',
         score: 100,
-        duration: 3000,
+        duration: 4500,
         items: [
             'Analyzing emotional priorities',
             'Mapping legacy preservation risk',
@@ -288,7 +288,7 @@ let timerSeconds = 10 * 60;
 let timerInterval = null;
 let promoTimerInterval = null;
 let interstitialSliderInterval = null;
-gtag('event', 'quiz_started', {
+gtag('event', 'quiz_started_old_q1', {
     quiz_name: 'personality_quiz',
     total_questions: totalQuestions
 });
@@ -360,14 +360,31 @@ function renderQuestion(item) {
       <div class="range-scale">
         <input id="q4Range" class="range-track" type="range" min="1" max="10" step="1" value="${defaultValue}">
         <div class="range-endpoints"><span>1</span><span>10</span></div>
+        <div class="range-current-label" id="q4CurrentLabel"></div>
       </div>
     </section>
   `;
         const range = document.getElementById('q4Range');
+        const rangeLabel = document.getElementById('q4CurrentLabel');
+        const q4Meanings = {
+            '1': 'Almost impossible to recall',
+            '2': 'Very vague memory',
+            '3': 'Mostly unclear',
+            '4': 'Only small fragments',
+            '5': 'Roughly half accurate',
+            '6': 'Somewhat clear',
+            '7': 'Mostly clear',
+            '8': 'Very clear',
+            '9': 'Almost perfectly clear',
+            '10': 'Perfectly vivid and accurate'
+        };
         const commitValue = (value) => {
             const normalized = String(value);
             state.selectedValue = normalized;
             state.answers[item.id] = normalized;
+            if (rangeLabel) {
+                rangeLabel.textContent = `${normalized}/10 — ${q4Meanings[normalized]}`;
+            }
         };
         range.addEventListener('input', () => commitValue(range.value));
         commitValue(defaultValue);
@@ -411,7 +428,7 @@ function renderQuestion(item) {
             const progressPercent = Math.round((qNumber / totalQuestions) * 100);
 
 
-                gtag('event', 'quiz_question_answered', {
+                gtag('event', 'quiz_question_answered_old_q1', {
                     quiz_name: 'personality_quiz',
                     question_number: qNumber,
                     question_key: item.id,
@@ -692,7 +709,7 @@ function renderThinkingBreak() {
             statusEl.innerHTML = '<span class="done-check" aria-hidden="true">✓</span><span class="status-text">Done</span>';
         });
         continueBtn.disabled = false;
-    }, 3000);
+    }, 4500);
 }
 
 function renderQuoteBreak() {
@@ -1387,7 +1404,7 @@ async function handleStripeSubmit() {
             if (error) {
                 showToast(error.message, 'danger');
             } else if (paymentIntent.status === 'succeeded') {
-                gtag('event', 'quiz_purchase_complete', {
+                gtag('event', 'quiz_purchase_complete_old_q1', {
                     value: 29.99,
                     currency: 'USD',
                     transaction_id: paymentIntent.id
@@ -1581,7 +1598,7 @@ window.addEventListener('beforeunload', function() {
         const completionRate = Math.round((answeredQuestionsCount / totalQuestions) * 100);
 
 
-            gtag('event', 'quiz_abandoned', {
+            gtag('event', 'quiz_abandoned_old_q1', {
                 quiz_name: 'personality_quiz',
                 last_question: lastQuestionNumber,
                 total_questions: totalQuestions,
@@ -1613,7 +1630,7 @@ window.registerUser = async function() {
 
             const totalAnswersCount = Object.keys(state.answers).filter(key => state.answers[key] !== null && state.answers[key] !== undefined).length;
 
-                gtag('event', 'quiz_registration_completed', {
+                gtag('event', 'quiz_registration_completed_old_q1', {
                     quiz_name: 'personality_quiz',
                     user_id: response.data.user?.user_id || response.data.user?.id || null,
                     email: email,
@@ -1625,7 +1642,7 @@ window.registerUser = async function() {
             setTimeout(() => {
                 showLoading(false);
             }, 500);
-                gtag('event', 'quiz_all_questions_completed', {
+                gtag('event', 'quiz_all_questions_completed_old_q1', {
                     quiz_name: 'personality_quiz',
                     total_questions: totalQuestions
                 });
