@@ -289,8 +289,15 @@ let timerInterval = null;
 let promoTimerInterval = null;
 let interstitialSliderInterval = null;
 const GA_EVENT_SUFFIX = '_old_q1';
+const META_EVENT_PREFIX = 'meta_';
 const trackEvent = (eventName, params = {}) => {
-    gtag('event', `${eventName}${GA_EVENT_SUFFIX}`, params);
+    if (typeof gtag === 'function') {
+        gtag('event', `${eventName}${GA_EVENT_SUFFIX}`, params);
+    }
+
+    if (typeof fbq === 'function') {
+        fbq('trackCustom', `${META_EVENT_PREFIX}${eventName}${GA_EVENT_SUFFIX}`, params);
+    }
 };
 
 trackEvent('quiz_started', {
