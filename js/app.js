@@ -6,7 +6,7 @@ const flow = [
         image: '/assets/quiz/start-welcome-trial/img/fme_welcome_quiz.jpeg',
         heading: `Don't just remember them.<br>Talk with them`,
         body: [
-            '25 Questions. One Eternal Memory.',
+            '24 Questions. One Eternal Memory.',
             '3-minute quiz.'
         ],
         buttonText: 'Continue'
@@ -222,14 +222,14 @@ const flow = [
             { label: 'I am still undecided', value: 'opt_2' },
         ]
     },
-    {
+    /*{
         type: 'question', id: 'q24', tag: 'Choice',
         title: 'Will you witness the "Digital Resurrection" of your history, or let it fade into gray?',
         options: [
             { label: 'SECURE LEGACY NOW', value: 'opt_1' },
             { label: 'Fade away', value: 'opt_2' },
         ]
-    },
+    },*/
     {
         type: 'nameInput',
         id: 'q25',
@@ -433,6 +433,25 @@ function renderQuestion(item) {
             state.answers[item.id] = value;
             host.querySelectorAll('.answer-card').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
+
+
+            saveQuizResponse({
+                questionId: item.id,
+                questionTag: item.tag || null,
+                questionText: item.title || '',
+                answerValue: value,
+                answerLabel: btn.querySelector('.answer-label')?.textContent || null,
+                questionNumber: questionIndexForStep(state.step),
+                stepIndex: state.step,
+                totalQuestions: totalQuestions,
+                userEmail: state.email || null,
+                metadata: {
+                    quiz_type: getQuizType(),
+                    source_url: window.location.href,
+                    selected_by_click: true,
+                    previous_value: state.answers[item.id] || null
+                }
+            });
 
             const qNumber = questionIndexForStep(state.step);
             const progressPercent = Math.round((qNumber / totalQuestions) * 100);
@@ -1345,6 +1364,23 @@ async function handleStripeSubmit() {
             if (error) {
                 showToast(error.message, 'danger');
             } else {
+                saveQuizResponse({
+                    questionId: 'purchase_completed',
+                    questionTag: 'Conversion',
+                    questionText: 'Trial activated successfully',
+                    answerValue: 'trial_started',
+                    answerLabel: 'Free trial activated',
+                    questionNumber: totalQuestions + 2,
+                    stepIndex: state.step,
+                    totalQuestions: totalQuestions,
+                    userEmail: state.email || paymentEmail,
+                    metadata: {
+                        quiz_type: getQuizType(),
+                        payment_type: 'trial',
+                        timestamp: new Date().toISOString()
+                    }
+                });
+
                 showToast('Trial activated successfully! Redirecting...', 'success');
                 setTimeout(() => {
                     window.location.href = '/quiz-payment-success?trial=true';
@@ -1363,6 +1399,24 @@ async function handleStripeSubmit() {
             if (error) {
                 showToast(error.message, 'danger');
             } else if (paymentIntent.status === 'succeeded') {
+                saveQuizResponse({
+                    questionId: 'purchase_completed',
+                    questionTag: 'Conversion',
+                    questionText: 'Payment successful',
+                    answerValue: 'paid',
+                    answerLabel: 'Subscription activated',
+                    questionNumber: totalQuestions + 2,
+                    stepIndex: state.step,
+                    totalQuestions: totalQuestions,
+                    userEmail: state.email || paymentEmail,
+                    metadata: {
+                        quiz_type: getQuizType(),
+                        payment_intent_id: paymentIntent.id,
+                        amount: 29.99,
+                        currency: 'USD'
+                    }
+                });
+
                 trackEvent('quiz_purchase_complete', {
                     value: 29.99,
                     currency: 'USD',
@@ -1642,3 +1696,135 @@ window.registerUser = async function() {
         return false;
     }
 };
+
+
+
+function saveQuizResponse(params) {
+    // Получаем или создаем sessionId
+    let sessionId = sessionStorage.getItem('quiz_session_id');
+    if (!sessionId) {
+        sessionId = crypto.randomUUID ? crypto.randomUUID() :
+            'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        sessionStorage.setItem('quiz_session_id', sessionId);
+    }
+
+    // Данные для отправки
+    const payload = {
+        session_id: sessionId,
+        question_id: params.questionId || 'unknown',
+        question_tag: params.questionTag || null,
+        question_text: params.questionText || '',
+        answer_value: String(params.answerValue || ''),
+        answer_label: params.answerLabel || null,
+        question_number: params.questionNumber || null,
+        step_index: params.stepIndex || null,
+        total_questions: params.totalQuestions || null,
+        user_email: params.userEmail || null,
+        metadata: {
+            timestamp: new Date().toISOString(),
+            user_agent: navigator.userAgent,
+            url: window.location.href,
+            ...params.metadata
+        }
+    };
+
+    // Отправка с обработкой ошибок
+    fetch('/v1/quiz/save-response', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+        },
+        body: JSON.stringify(payload)
+    })
+        .then(response => {
+            if (!response.ok) {
+                console.warn('Quiz response save failed (non-critical)', response.status);
+                return;
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data?.success) {
+                // Можно сохранить в localStorage для резерва
+                try {
+                    const savedResponses = JSON.parse(localStorage.getItem('quiz_responses') || '[]');
+                    savedResponses.push({
+                        ...payload,
+                        saved_at: new Date().toISOString()
+                    });
+                    localStorage.setItem('quiz_responses', JSON.stringify(savedResponses));
+                } catch (e) {
+                    // Игнорируем ошибки localStorage
+                }
+            }
+        })
+        .catch(error => {
+            // Игнорируем ошибку - квиз должен продолжаться
+            console.debug('Quiz response save error (ignored):', error.message);
+        });
+}
+
+// Вспомогательная функция для массового сохранения
+function saveAllQuizResponses() {
+    try {
+        const savedResponses = JSON.parse(localStorage.getItem('quiz_responses') || '[]');
+        if (savedResponses.length === 0) return;
+
+        // Отправляем все несохраненные ответы
+        savedResponses.forEach(response => {
+            saveQuizResponse(response);
+        });
+
+        // Очищаем после отправки
+        localStorage.removeItem('quiz_responses');
+    } catch (e) {
+        console.debug('Failed to sync saved responses:', e.message);
+    }
+}
+
+// Автоматическая синхронизация при уходе со страницы
+window.addEventListener('beforeunload', function() {
+    // Сохраняем все ответы из state перед уходом
+    if (state && state.answers) {
+        const flowItems = flow.filter(item => item.type === 'question' || item.type === 'nameInput');
+        const totalQuestions = flowItems.length;
+
+        Object.keys(state.answers).forEach((questionId, index) => {
+            const answer = state.answers[questionId];
+            if (answer !== null && answer !== undefined) {
+                const questionItem = flow.find(item => item.id === questionId);
+                if (questionItem) {
+                    saveQuizResponse({
+                        questionId: questionId,
+                        questionTag: questionItem.tag || null,
+                        questionText: questionItem.title || '',
+                        answerValue: answer,
+                        answerLabel: getAnswerLabel(questionItem, answer),
+                        questionNumber: index + 1,
+                        stepIndex: state.step,
+                        totalQuestions: totalQuestions,
+                        userEmail: state.email || null
+                    });
+                }
+            }
+        });
+    }
+});
+
+// Вспомогательная функция для получения метки ответа
+function getAnswerLabel(question, value) {
+    if (!question.options) return null;
+    const option = question.options.find(opt => opt.value === value);
+    return option ? option.label : null;
+}
+
+function getQuizType() {
+    const path = window.location.pathname;
+    const segments = path.split('/').filter(Boolean);
+    return segments[segments.length - 1] || 'default';
+}
