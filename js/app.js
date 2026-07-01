@@ -252,6 +252,8 @@ const flow = [
         description: 'Analyzing your answers and creating an offer tailored for your family.',
         score: 100,
         duration: 4500,
+        requireContinue: true,
+        continueButtonText: 'Continue',
         items: [
             'Analyzing emotional priorities',
             'Mapping legacy preservation risk',
@@ -793,20 +795,26 @@ function animateLoader(item) {
           </div>
         `).join('')}
       </div>
+      ${item.requireContinue ? `<button class="interstitial-continue-btn hidden" type="button" id="loaderContinueBtn">${item.continueButtonText || 'Continue'}</button>` : ''}
     </section>
   `;
 
     setSticky({
         stepLabel: 'Building your result',
         hint: 'We are processing your answers and matching the best conversion path.',
-        continueText: 'Please wait…',
+        continueText: item.requireContinue ? 'Continue' : 'Please wait…',
         continueDisabled: true,
+        continueHidden: !!item.requireContinue,
         backHidden: true
     });
 
     const scoreEl = document.getElementById('loaderScore');
     const ringEl = document.getElementById('loaderRing');
     const statusEls = Array.from(host.querySelectorAll('.loader-row .status'));
+    const loaderContinueBtn = document.getElementById('loaderContinueBtn');
+    if (loaderContinueBtn) {
+        loaderContinueBtn.addEventListener('click', () => nextStep());
+    }
     const target = parseInt(item.score, 10);
     let current = 0;
     const intervalStep = Math.max(18, Math.floor(item.duration / Math.max(target, 1)));
@@ -820,7 +828,13 @@ function animateLoader(item) {
         if (safeValue >= target && !finalized) {
             finalized = true;
             clearInterval(countUp);
-            finalizeLoaderRows(statusEls, () => nextStep());
+            finalizeLoaderRows(statusEls, () => {
+                if (loaderContinueBtn) {
+                    loaderContinueBtn.classList.remove('hidden');
+                    return;
+                }
+                nextStep();
+            });
         }
     }, intervalStep);
 }
