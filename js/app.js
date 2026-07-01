@@ -274,7 +274,8 @@ const state = {
     answers: {},
     selectedValue: null,
     email: '',
-    ageGroup: null
+    ageGroup: null,
+    thinkingContinueApproved: false
 };
 
 
@@ -725,8 +726,12 @@ function renderThinkingBreak() {
 
     const riskValueEl = document.getElementById('thinkingRiskValue');
     const riskBarEl = document.getElementById('thinkingRiskBar');
+    state.thinkingContinueApproved = false;
     const thinkingContinueBtn = document.getElementById('thinkingContinueBtn');
-    thinkingContinueBtn.addEventListener('click', () => nextStep());
+    thinkingContinueBtn.addEventListener('click', () => {
+        state.thinkingContinueApproved = true;
+        nextStep();
+    });
     const target = Math.floor(Math.random() * 11) + 75;
     let value = 0;
     const timer = setInterval(() => {
@@ -1488,6 +1493,10 @@ function renderCurrentStep() {
 
 function nextStep() {
   const current = flow[state.step];
+
+    if (current?.type === 'thinking' && !state.thinkingContinueApproved) {
+        return;
+    }
 
     if (current?.type === 'question') {
         const currentQuestionNum = questionIndexForStep(state.step);
