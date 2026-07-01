@@ -6,7 +6,7 @@ const flow = [
         image: '/assets/quiz/start-welcome-trial/img/fme_welcome_quiz.jpeg',
         heading: `Don't just remember them.<br>Talk with them`,
         body: [
-            '24 Questions. One Eternal Memory.',
+            '25 Questions. One Eternal Memory.',
             '3-minute quiz.'
         ],
         buttonText: 'Continue'
@@ -189,7 +189,15 @@ const flow = [
         ]
     },
     {
-        type: 'question', id: 'q20', tag: 'Backup',
+        type: 'question', id: 'q20', tag: 'Connection',
+        title: 'Are you likely to connect with your loved one soon to share memories and answer questions together?',
+        options: [
+            { label: 'Yes', value: 'yes' },
+            { label: 'No', value: 'no' },
+        ]
+    },
+    {
+        type: 'question', id: 'q21', tag: 'Backup',
         title: "If you lost your phone today, what percentage of Your Loved One's digital soul would be deleted forever?",
         options: [
             { label: '100% (High risk)', value: 'opt_1' },
@@ -198,7 +206,7 @@ const flow = [
         ]
     },
     {
-        type: 'question', id: 'q21', tag: 'Urgency',
+        type: 'question', id: 'q22', tag: 'Urgency',
         title: 'How much would you regret not capturing their essence while their mind and memory are still sharp?',
         options: [
             { label: 'Deeply regret', value: 'opt_1' },
@@ -207,7 +215,7 @@ const flow = [
         ]
     },
     {
-        type: 'question', id: 'q22', tag: 'Commitment',
+        type: 'question', id: 'q23', tag: 'Commitment',
         title: 'Are you ready to invest 30 minutes today to ensure Your Loved One’s presence remains in your family forever?',
         options: [
             { label: "Yes, I'm ready", value: 'opt_1' },
@@ -215,7 +223,7 @@ const flow = [
         ]
     },
     {
-        type: 'question', id: 'q23', tag: 'Decision',
+        type: 'question', id: 'q24', tag: 'Decision',
         title: 'Will you be the generation that lets your family line go silent for the sake of $49?',
         options: [
             { label: 'No, I will secure the legacy', value: 'opt_1' },
@@ -704,19 +712,21 @@ function renderThinkingBreak() {
           <span class="status is-loading"><span class="status-text">Analyzing</span><span class="pulse-dots"><span></span><span></span><span></span></span></span>
         </div>
       </div>
+      <button class="interstitial-continue-btn hidden" type="button" id="thinkingContinueBtn">Continue</button>
     </section>
   `;
 
     setSticky({
         stepLabel: 'Assessment in progress',
         hint: 'Please wait while we complete your interim analysis.',
-        continueText: 'Continue',
-        continueDisabled: true,
+        continueHidden: true,
         backHidden: true
     });
 
     const riskValueEl = document.getElementById('thinkingRiskValue');
     const riskBarEl = document.getElementById('thinkingRiskBar');
+    const thinkingContinueBtn = document.getElementById('thinkingContinueBtn');
+    thinkingContinueBtn.addEventListener('click', () => nextStep());
     const target = Math.floor(Math.random() * 11) + 75;
     let value = 0;
     const timer = setInterval(() => {
@@ -737,7 +747,7 @@ function renderThinkingBreak() {
             statusEl.classList.add('is-done');
             statusEl.innerHTML = '<span class="done-check" aria-hidden="true">✓</span><span class="status-text">Done</span>';
         });
-        continueBtn.disabled = false;
+        thinkingContinueBtn.classList.remove('hidden');
     }, 3000);
 }
 
